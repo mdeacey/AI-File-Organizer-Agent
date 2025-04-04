@@ -18,16 +18,6 @@ from agno.models.google.gemini import Gemini
 # Environment variable loading
 from dotenv import load_dotenv
 
-# --- Configuration ---
-# Values will be loaded from environment variables / .env file
-# GEMINI_MODEL = "gemini-1.5-flash"
-# DEBUG = False
-
-# --- Path Configuration ---
-# Values will be loaded from environment variables / .env file
-# TOP_LEVEL_ALLOWED_PATH = os.path.expanduser("~/")
-# DEFAULT_TARGET_DIR = "/Users/sethrose/Downloads"
-
 # This will be determined based on the logic below
 ALLOWED_BASE_PATH_STR = ""
 
