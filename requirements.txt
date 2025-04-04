@@ -1,0 +1,7 @@
+agno
+# ollama # No longer needed
+pydantic
+mcp
+# google-generativeai # Removed for clarity, error pointed to google-genai
+google-genai # Needed based on working example and ImportError
+python-dotenv # For loading .env file
