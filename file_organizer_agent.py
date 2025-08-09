@@ -13,7 +13,7 @@ from agno.tools.mcp import MCPTools
 from mcp import StdioServerParameters
 
 # Model import
-from agno.models.google.gemini import Gemini
+from agno.models.ollama import Ollama
 
 # Environment variable loading
 from dotenv import load_dotenv
@@ -39,7 +39,8 @@ async def main():
     load_dotenv() # Load environment variables from .env file
 
     # --- Load Configuration from Environment ---
-    gemini_model_id = "gemini-1.5-flash" # Default if not specified elsewhere
+    ollama_model_id = os.getenv("OLLAMA_MODEL", "llama3.2") # Default model if not specified
+    ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434") # Default Ollama URL
     debug_mode = os.getenv("DEBUG", "False").lower() in ('true', '1', 't') # Handle boolean conversion
 
     # Load path config with defaults
@@ -88,17 +89,16 @@ async def main():
     print("\n[Optional] Provide any context for organization (e.g., 'These are project files', 'Group photos by year').")
     user_context_input = input("> ").strip()
 
-    # --- Initialize Gemini Model ---
+    # --- Initialize Ollama Model ---
     try:
-        gemini_llm = Gemini(id=gemini_model_id)
-        if not os.getenv("GOOGLE_API_KEY"):
-             print("\nWarning: GOOGLE_API_KEY not found in environment. Agent may fail.")
+        ollama_llm = Ollama(id=ollama_model_id, api_key="ollama", base_url=ollama_base_url)
+        print(f"Initializing Ollama model: {ollama_model_id} at {ollama_base_url}")
     except ImportError:
-        print("\nError: google-generativeai library not found. Please run 'pip install -r requirements.txt'")
+        print("\nError: Ollama integration not found in agno library. Please ensure agno supports Ollama.")
         return
     except Exception as e:
-        print(f"\nError initializing Gemini model: {e}")
-        print("Please ensure your GOOGLE_API_KEY is set correctly in the .env file or environment.")
+        print(f"\nError initializing Ollama model: {e}")
+        print(f"Please ensure Ollama is running at {ollama_base_url} and the model '{ollama_model_id}' is available.")
         return
 
     # --- Configure and Launch MCP Filesystem Server ---
@@ -118,7 +118,7 @@ async def main():
         async with MCPTools(server_params=server_params) as mcp_tools:
             print("MCP Tools Initialized.")
             organizer_agent = Agent(
-                model=gemini_llm,
+                model=ollama_llm,
                 tools=[mcp_tools],
                 # Agent instructions defining its role, rules, and tool usage
                 instructions=dedent(f"""\
