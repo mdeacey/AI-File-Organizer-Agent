@@ -2,3 +2,5 @@ agno
 pydantic
 mcp
 python-dotenv # For loading .env file
+packaging
+ollama

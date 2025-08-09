@@ -91,7 +91,7 @@ async def main():
 
     # --- Initialize Ollama Model ---
     try:
-        ollama_llm = Ollama(id=ollama_model_id, api_key="ollama", base_url=ollama_base_url)
+        ollama_llm = Ollama(id=ollama_model_id, base_url=ollama_base_url)
         print(f"Initializing Ollama model: {ollama_model_id} at {ollama_base_url}")
     except ImportError:
         print("\nError: Ollama integration not found in agno library. Please ensure agno supports Ollama.")
